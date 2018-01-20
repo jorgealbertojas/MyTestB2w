@@ -14,8 +14,9 @@ public class Utilite {
     /**
      * Field for PUT EXTRA.
      */
-    //public final static String PUT_EXTRA_NAME = "NAME";
-    //public final static String PUT_EXTRA_LOGIN = "LOGIN";
+    public final static String PUT_EXTRA_CHILDREN = "put_extra_children";
+    public final static String PUT_BUNDLE_CHILDREN = "put_bundle_children";
+
 
 
 

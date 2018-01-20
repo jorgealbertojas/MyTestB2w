@@ -6,19 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.example.jorge.mytestb2w.R;
 import com.example.jorge.mytestb2w.model.Children;
 
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by jorge on 19/01/2018.
- * Adapter Department for fill list for Retrofit
+ * Created by jorge on 20/01/2018.
+ * Adapter Categories for fill list for Retrofit
  */
 
-public class AdapterDepartment extends RecyclerView.Adapter<AdapterDepartment.ViewHolder> {
+public class AdapterCategory extends RecyclerView.Adapter<AdapterCategory.ViewHolder> {
 
     private final List<Children> data;
 
@@ -29,19 +31,19 @@ public class AdapterDepartment extends RecyclerView.Adapter<AdapterDepartment.Vi
  * An on-click handler that we've defined to make it easy for an Activity to interface with
  * our RecyclerView
  */
-    private static AdapterDepartmentOnClickHandler mClickHandler;
+    private static AdapterCategory.AdapterCategoryOnClickHandler mClickHandler;
 
     /**
      * The interface that receives onClick messages.
      */
-    public interface AdapterDepartmentOnClickHandler {
+    public interface AdapterCategoryOnClickHandler {
         void onClick(Children children);
     }
 
     /**
      * Constructs the class
      **/
-    public AdapterDepartment(AdapterDepartmentOnClickHandler clickHandler) {
+    public AdapterCategory(AdapterCategory.AdapterCategoryOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
         data = null;
     }
@@ -51,7 +53,7 @@ public class AdapterDepartment extends RecyclerView.Adapter<AdapterDepartment.Vi
      * class view holder
      **/
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.tv_name_department)
+        @BindView(R.id.tv_name_category)
         TextView mNameTextView;
 
         /**
@@ -64,7 +66,7 @@ public class AdapterDepartment extends RecyclerView.Adapter<AdapterDepartment.Vi
         }
 
         /**
-         * configuration the Event onclick. Pass o Object Department
+         * configuration the Event onclick. Pass o Object Category
          **/
         @Override
         public void onClick(View view) {
@@ -76,9 +78,9 @@ public class AdapterDepartment extends RecyclerView.Adapter<AdapterDepartment.Vi
     }
 
     /**
-     * create lit de Adapter Department
+     * create lit de Adapter Category
      **/
-    public AdapterDepartment(List<Children> data) {
+    public AdapterCategory(List<Children> data) {
         this.data = data;
     }
 
@@ -86,23 +88,24 @@ public class AdapterDepartment extends RecyclerView.Adapter<AdapterDepartment.Vi
      * Create information View holder
      **/
     @Override
-    public AdapterDepartment.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterCategory.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_departament, parent, false);
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_category, parent, false);
         mContext = parent.getContext();
-        return new ViewHolder(v);
+        return new AdapterCategory.ViewHolder(v);
     }
+
 
     /**
      * Create filed bind hold full
      **/
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
         /** Create filed bind hold full **/
         Children children = ((Children) data.get(position));
         holder.mNameTextView.setText(children.getTitle());
     }
+
 
     /**
      * Returns the total Adapter

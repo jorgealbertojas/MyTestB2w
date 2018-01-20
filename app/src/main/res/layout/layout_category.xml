@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cv_department"
+        android:id="@+id/cv_category"
         android:layout_gravity="center"
         android:layout_width="0dp"
         card_view:contentPadding="5dp"
@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/tv_name_department"
+                android:id="@+id/tv_name_category"
                 android:layout_width="296dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"

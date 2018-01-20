@@ -1,12 +1,13 @@
 package com.example.jorge.mytestb2w.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by jorge on 19/01/2018.
  */
 
-public class Children {
+public class Children implements Serializable {
     private String _id;
     private String type;
     private String flag;
