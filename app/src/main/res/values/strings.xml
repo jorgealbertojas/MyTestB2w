@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MyTestB2w</string>
+
+    <string name="Error_Access">No access internet</string>
+    <string name="Error_Access_empty">Data empty! There were problems consuming the product, please use RESTORE button.</string>
+
 </resources>
