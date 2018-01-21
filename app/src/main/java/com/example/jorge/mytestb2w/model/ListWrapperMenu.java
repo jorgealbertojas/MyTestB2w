@@ -8,6 +8,6 @@ import java.util.List;
  * Created by jorge on 20/01/2018.
  */
 
-public class ListWrapper {
+public class ListWrapperMenu {
     public Menu menu;
 }

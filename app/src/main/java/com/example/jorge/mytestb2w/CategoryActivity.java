@@ -1,5 +1,6 @@
 package com.example.jorge.mytestb2w;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import com.example.jorge.mytestb2w.interfaceFolder.InterfaceMenu;
 import com.example.jorge.mytestb2w.model.Children;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,6 +69,28 @@ public class CategoryActivity extends AppCompatActivity implements AdapterCatego
 
     @Override
     public void onClick(Children children) {
+        Context context = this;
+        Class destinationClass = ProductActivity.class;
+        Intent intentToStartDetailActivity = new Intent(context, destinationClass);
 
+        String idCategory = getIdCategoryLink(children.getLink());
+
+        intentToStartDetailActivity.putExtra(Utilite.PUT_EXTRA_CHILDREN_ID,idCategory);
+        startActivity(intentToStartDetailActivity);
     }
+
+    public String getIdCategoryLink(String link){
+
+        if (!link.equals("")){
+            int position = link.toString().lastIndexOf("/");
+            if (position > 0)
+                link = link.substring(position + 1, link.length());
+        }else{
+            link = "0";
+        }
+
+        return link;
+    }
+
+
 }

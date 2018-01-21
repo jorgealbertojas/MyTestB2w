@@ -9,17 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.jorge.mytestb2w.Utilite.EndlessRecyclerViewScrollListener;
 import com.example.jorge.mytestb2w.Utilite.Utilite;
 import com.example.jorge.mytestb2w.adapter.AdapterDepartment;
 import com.example.jorge.mytestb2w.interfaceFolder.InterfaceMenu;
 import com.example.jorge.mytestb2w.model.Children;
-import com.example.jorge.mytestb2w.model.ListWrapper;
+import com.example.jorge.mytestb2w.model.ListWrapperMenu;
 import com.example.jorge.mytestb2w.model.Menu;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,9 +84,9 @@ public class DepartmentActivity extends AppCompatActivity implements AdapterDepa
     /**
      * Call Get Data Information of the Menu and Children.
      */
-    private Callback<ListWrapper> menuCallback = new Callback<ListWrapper>() {
+    private Callback<ListWrapperMenu> menuCallback = new Callback<ListWrapperMenu>() {
         @Override
-        public void onResponse(Call<ListWrapper> call, Response<ListWrapper> response) {
+        public void onResponse(Call<ListWrapperMenu> call, Response<ListWrapperMenu> response) {
             try {
                 if (response.isSuccessful()) {
                     Menu data = new Menu();
@@ -113,7 +111,7 @@ public class DepartmentActivity extends AppCompatActivity implements AdapterDepa
         }
 
         @Override
-        public void onFailure(Call<ListWrapper> call, Throwable t) {
+        public void onFailure(Call<ListWrapperMenu> call, Throwable t) {
             t.printStackTrace();
         }
     };
