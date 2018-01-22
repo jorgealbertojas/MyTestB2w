@@ -12,8 +12,8 @@ public class Product implements Serializable{
     private List<Image> image;
     private String name;
     private int rate;
-    private String url_image_small;
-    private String url_image_big;
+    private String url_image_small = "0";
+    private String url_image_big  = "0";
     private String value;
     private String price;
     private int quantity;

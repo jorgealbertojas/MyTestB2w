@@ -1,10 +1,12 @@
 <resources>
-    <string name="app_name">MyTestB2w</string>
+    <string name="app_name">Departamentos</string>
 
     <string name="Error_Access">No access internet</string>
     <string name="Error_Access_empty">No more product</string>
 
     <string name="money">R$</string>
     <string name="code">Código Produto</string>
+    <string name="product">Products</string>
+    <string name="listProduct">Lista de Produto</string>
 
 </resources>

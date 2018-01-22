@@ -109,7 +109,7 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
         }
 
 
-        if (product.getUrl_image_small() != null) {
+        if (!product.getUrl_image_small().toString().equals("0")) {
             Picasso.with(mContext)
                     .load(product.getUrl_image_small())
                     .placeholder(R.mipmap.ic_launcher)

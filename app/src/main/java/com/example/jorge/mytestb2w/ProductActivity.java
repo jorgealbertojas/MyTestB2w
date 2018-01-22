@@ -3,12 +3,14 @@ package com.example.jorge.mytestb2w;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -79,12 +81,17 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+
         ButterKnife.bind(this);
 
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_product);
 
 
         Resources res = getResources();
+
+
+
+
         mTwoPane = res.getBoolean(R.bool.adjust_view_bounds);
 
         if (savedInstanceState == null) {
@@ -256,6 +263,10 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
             urlImageSmall = data.getProduct().getResult().getImages().get(0).getMedium();
         }else if (data.getProduct().getResult().getImages().get(0).getBig() != null) {
             urlImageSmall = data.getProduct().getResult().getImages().get(0).getBig();
+        }else if (data.getProduct().getResult().getImages().get(0).getLarge() != null) {
+            urlImageSmall = data.getProduct().getResult().getImages().get(0).getLarge();
+        }else if (data.getProduct().getResult().getImages().get(0).getExtraLarge() != null) {
+            urlImageSmall = data.getProduct().getResult().getImages().get(0).getExtraLarge();
         }
 
 
@@ -265,6 +276,10 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
             urlImageBig = data.getProduct().getResult().getImages().get(0).getLarge();
         }else if (data.getProduct().getResult().getImages().get(0).getExtraLarge() != null) {
             urlImageBig = data.getProduct().getResult().getImages().get(0).getExtraLarge();
+        }if (data.getProduct().getResult().getImages().get(0).getSmall() != null){
+            urlImageBig = data.getProduct().getResult().getImages().get(0).getSmall();
+        } else if (data.getProduct().getResult().getImages().get(0).getMedium() != null) {
+            urlImageBig = data.getProduct().getResult().getImages().get(0).getMedium();
         }
 
 

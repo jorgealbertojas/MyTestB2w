@@ -33,7 +33,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="30dp"
                 android:text="tv_name"
-                android:textColor="@color/colorBlueLight"
+                android:textColor="@color/colorRed"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"

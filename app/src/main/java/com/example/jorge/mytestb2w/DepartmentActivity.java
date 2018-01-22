@@ -101,6 +101,7 @@ public class DepartmentActivity extends AppCompatActivity implements AdapterDepa
             mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
             mAdapterDepartment = new AdapterDepartment(mListChildren);
             mRecyclerView.setAdapter(mAdapterDepartment);
+            mAdapterDepartment.notifyDataSetChanged();
         }
 
     }
@@ -137,7 +138,7 @@ public class DepartmentActivity extends AppCompatActivity implements AdapterDepa
                     Menu data = new Menu();
                     data = (response.body().menu);
 
-                    mAdapterDepartment = new AdapterDepartment(data.getComponent().getChildren().get(0).getChildren());
+                    mAdapterDepartment = new AdapterDepartment(data.getComponent().getChildren().get(1).getChildren().get(0).getChildren());
                     mRecyclerView.setAdapter(mAdapterDepartment);
 
                     mLoadingIndicator.setVisibility(View.INVISIBLE);
@@ -168,7 +169,7 @@ public class DepartmentActivity extends AppCompatActivity implements AdapterDepa
          * use RecyclerView for list the Department .
          */
         mRecyclerView.setHasFixedSize(true);
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(DepartmentActivity.this));
         mAdapterDepartment = new AdapterDepartment(this);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -177,25 +178,35 @@ public class DepartmentActivity extends AppCompatActivity implements AdapterDepa
 
     @Override
     public void onClick(Children children) {
+
         Context context = this;
-        Class destinationClass = CategoryActivity.class;
+        Class destinationClass = ProductActivity.class;
         Intent intentToStartDetailActivity = new Intent(context, destinationClass);
 
-        Children allChildren = new Children();
-        mListChildren = new ArrayList<Children>();
-        allChildren = getAllCategory(children);
+        String idCategory = getIdCategoryLink(children.getLink());
 
-        Bundle bundle = new Bundle();
-
-        bundle.putSerializable(PUT_BUNDLE_CHILDREN, allChildren);
-        intentToStartDetailActivity.putExtra(Utilite.PUT_EXTRA_CHILDREN,bundle);
-
+        intentToStartDetailActivity.putExtra(Utilite.PUT_EXTRA_CHILDREN_ID,idCategory);
         startActivity(intentToStartDetailActivity);
+
+    }
+
+    public String getIdCategoryLink(String link){
+
+        if (!link.equals("")){
+            int position = link.toString().lastIndexOf("/");
+            if (position > 0)
+                link = link.substring(position + 1, link.length());
+        }else{
+            link = "0";
+        }
+
+        return link;
     }
 
 
     /** This Function Recursive have responsible  Call RecursiveCategory
      * With the Show all categories
+     * I Used this function when have other Category Children in of Children
      **/
     private Children getAllCategory(Children children){
         Children allChildren = new Children();
