@@ -1,9 +1,6 @@
 package com.example.jorge.mytestb2w.adapter;
 
-import android.app.admin.SystemUpdatePolicy;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,12 +100,12 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
 
         Product product = ((Product) data.get(position));
         holder.mNameTextView.setText((product.getName()));
-        holder.mPriceTextView.setText(R.string.money + " " + product.getPrice());
+        holder.mPriceTextView.setText(mContext.getResources().getString(R.string.money) + " " + product.getPrice());
 
         if (product.getValue() != null){
-            holder.mInstallmentTextView.setText("");
+            holder.mInstallmentTextView.setText(Integer.toString(product.getQuantity()) + " x " + product.getValue());
         }else {
-            holder.mInstallmentTextView.setText(product.getQuantity()+ " x " + product.getValue());
+            holder.mInstallmentTextView.setText("");
         }
 
 

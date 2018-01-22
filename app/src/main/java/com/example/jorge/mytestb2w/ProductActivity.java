@@ -1,8 +1,9 @@
 package com.example.jorge.mytestb2w;
 
 import android.content.Context;
-import android.database.Observable;
-import android.os.AsyncTask;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,7 +31,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_BUNDLE_PRODUCT;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_EXTRA_CHILDREN_ID;
+import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_EXTRA_PRODUCT;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.SUPPORT_URL_FILTER_PART1;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.SUPPORT_URL_FILTER_PART2;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.SUPPORT_URL_SORT_BY;
@@ -49,6 +53,10 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
 
     LinearLayoutManager mLinearLayoutManager;
     String mId;
+
+    private boolean mTwoPane;
+
+
     private EndlessRecyclerViewScrollListener mScrollListener;
 
     @Override
@@ -71,9 +79,6 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
         mInterfaceProduct.getProduct(SUPPORT_URL_START , SUPPORT_URL_SORT_BY ,SUPPORT_URL_SOURCE , SUPPORT_URL_FILTER_PART1 + mId + SUPPORT_URL_FILTER_PART2 ).enqueue(productCallback);
 
         createProductDetailAPI();
-
-
-
 
     }
 
@@ -172,10 +177,10 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
         String price = "0";
         int quantity = 0;
         String value = "0";
-        if (data.getInstallment().getResult().size() < 0){
-            price = Double.toString(data.getInstallment().getResult().get(0).getTotal());
+        if (data.getInstallment().getResult().size() > 0){
+            price = Float.toString(data.getInstallment().getResult().get(0).getTotal());
             quantity = (data.getInstallment().getResult().get(0).getQuantity());
-            value = Double.toString(data.getInstallment().getResult().get(0).getValue());
+            value = Float.toString(data.getInstallment().getResult().get(0).getValue());
         }
 
         String urlImageSmall = "";
@@ -203,16 +208,15 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
     }
 
 
+    /**
+     * use RecyclerView for list the Category .
+     */
     private void initRecyclerView() {
-        /**
-         * use RecyclerView for list the Category .
-         */
+
         mRecyclerView.setHasFixedSize(true);
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         mAdapterProduct = new AdapterProduct(this);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-
 
         mScrollListener = new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
             @Override
@@ -277,6 +281,37 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
 
     @Override
     public void onClick(Product product) {
+
+
+        Resources res = getResources();
+        mTwoPane = res.getBoolean(R.bool.adjust_view_bounds);
+
+
+        if (mTwoPane) {
+         /*   InformationIngredientsFragment part1Fragment = new InformationIngredientsFragment();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            part1Fragment.setListIndex(steps);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.part1_container, part1Fragment)
+                    .commit();
+
+            VideoIngredientsFragment part2Fragment = new VideoIngredientsFragment();
+            FragmentManager fragmentManager2 = getActivity().getSupportFragmentManager();
+            part2Fragment.setListIndex(steps.getVideoURL());
+            fragmentManager2.beginTransaction()
+                    .replace(R.id.part2_container, part2Fragment)
+                    .commit();
+        */} else {
+
+            Class destinationClass = DetailProductActivity.class;
+            Intent intentToStartDetailActivity = new Intent(this, destinationClass);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(PUT_BUNDLE_PRODUCT, product);
+
+            intentToStartDetailActivity.putExtra(PUT_EXTRA_PRODUCT, bundle);
+            startActivity(intentToStartDetailActivity);
+        }
 
     }
 

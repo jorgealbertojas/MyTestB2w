@@ -6,8 +6,8 @@ package com.example.jorge.mytestb2w.model.ProductDetail;
 
 public class ResultValue {
     private int quantity;
-    private double total;
-    private double value;
+    private float total;
+    private float value;
 
     public int getQuantity() {
         return quantity;
@@ -17,19 +17,19 @@ public class ResultValue {
         this.quantity = quantity;
     }
 
-    public double getTotal() {
+    public float getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(float total) {
         this.total = total;
     }
 
-    public double getValue() {
+    public float getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(float value) {
         this.value = value;
     }
 }

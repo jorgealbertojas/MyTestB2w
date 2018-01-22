@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_margin="10dp"
+            android:id="@+id/iv_image_product_detail"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_launcher"
+/>
+
+
+        <TextView
+            android:id="@+id/tv_name_product_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:lines="5"
+            android:layout_margin="5dp"
+            android:text="tv_name_product"
+            android:textColor="@android:color/background_dark"
+            android:textSize="14sp"
+/>
+
+        <TextView
+            android:id="@+id/tv_product_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="kkkkkkkk">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_price_detail"
+            android:layout_width="246dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name_product"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"
+            android:maxLines="1"
+            android:text="tv_price"
+            android:textSize="24sp"
+            android:textStyle="bold"
+/>
+
+        <TextView
+            android:id="@+id/tv_installment_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_price"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="tv_installment"
+            android:textColor="@color/colorRed"
+            android:textStyle="bold" />
+
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>
