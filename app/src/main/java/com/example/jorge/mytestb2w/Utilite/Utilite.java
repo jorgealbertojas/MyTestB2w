@@ -25,7 +25,7 @@ public class Utilite {
 
 
     /**
-     * Field for Suprt URL
+     * Field for Support URL
      */
     public final static String SUPPORT_URL_FILTER_PART1 = "%7B\"id\"%3A\"category.id\"%2C\"value\"%3A\"";
     public final static String SUPPORT_URL_FILTER_PART2  = "\"%2C\"fixed\"%3Atrue%7D";
@@ -33,7 +33,18 @@ public class Utilite {
     public final static String SUPPORT_URL_SORT_BY  = "bestSellers";
     public final static String SUPPORT_URL_START = "0";
 
+
+    /**
+     * Field for pagination URL more information
+     */
     public final static int SUPPORT_STEP = 24;
+
+
+    /**
+     * Field for Suprt URL
+     */
+    public final static String KEY_RECYCLER_STATE = "recycler_state";
+    public final static String KEY_ADAPTER_STATE = "adapter_state";
 
 
 

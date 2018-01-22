@@ -289,7 +289,7 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
     */
     public void loadNextDataFromApi(String page) {
 
-        if (Common.isOnline(getSystemService(Context.CONNECTIVITY_SERVICE))) {
+        if (Common.isOnline(this)) {
             createProductAPI();
             mInterfaceProduct.getProduct(page , SUPPORT_URL_SORT_BY ,SUPPORT_URL_SOURCE , SUPPORT_URL_FILTER_PART1 + mId + SUPPORT_URL_FILTER_PART2).enqueue(productCallback);
         } else {

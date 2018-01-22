@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.example.jorge.mytestb2w.DepartmentActivity">
+
+    <TextView
+        android:id="@+id/tv_name_product_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:lines="5"
+        android:text="tv_name_product"
+        android:textColor="@android:color/background_dark"
+        android:textSize="14sp"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_image_product_detail"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/tv_price_detail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_name_product"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
+        android:text="tv_price"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_image_product_detail"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name_product_detail" />
+
+    <TextView
+        android:id="@+id/tv_installment_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_price"
+        android:layout_margin="20dp"
+        android:text="tv_installment"
+        android:textColor="@color/colorRed"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/iv_image_product_detail"
+        app:layout_constraintTop_toBottomOf="@+id/tv_price_detail" />
+
+    <ImageView
+        android:id="@+id/iv_image_product_detail"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:src="@mipmap/ic_launcher" />
+
+
+    <TextView
+        android:id="@+id/tv_product_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="kkkkkkkk"
+        android:layout_margin="20dp"
+        app:layout_constraintStart_toEndOf="@+id/iv_image_product_detail"
+        app:layout_constraintTop_toBottomOf="@+id/tv_installment_detail">
+
+    </TextView>
+
+
+</android.support.constraint.ConstraintLayout>
