@@ -1,13 +1,11 @@
 package com.example.jorge.mytestb2w;
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.example.jorge.mytestb2w.fragment.FragmentDetailProduct;
 import com.example.jorge.mytestb2w.model.Product;
-
-import java.util.ArrayList;
 
 import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_BUNDLE_PRODUCT;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_EXTRA_PRODUCT;
@@ -31,7 +29,6 @@ public class DetailProductActivity extends AppCompatActivity {
             ShowFragmentDetail(product);
 
         }
-
 
 
     }

@@ -2,9 +2,9 @@ package com.example.jorge.mytestb2w;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,97 +36,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.jorge.mytestb2w.Utilite.Utilite.KEY_ADAPTER_STATE;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.KEY_RECYCLER_STATE;
-import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_BUNDLE_CHILDREN;
 
 // Thia activity show information Departament
 public class DepartmentActivity extends AppCompatActivity implements AdapterDepartment.AdapterDepartmentOnClickHandler {
 
+    private static Bundle mBundleRecyclerViewState;
     AdapterDepartment mAdapterDepartment;
-    private InterfaceMenu mInterfaceMenu;
-
     @BindView(R.id.rv_department)
     RecyclerView mRecyclerView;
 
     LinearLayoutManager mLinearLayoutManager;
 
     List<Children> mListChildren;
-
+    private InterfaceMenu mInterfaceMenu;
     private ProgressBar mLoadingIndicator;
-    private static Bundle mBundleRecyclerViewState;
     private Parcelable mListState;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_department);
-
-        ButterKnife.bind(this);
-
-        // Get a reference to the ProgressBar using findViewById
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_department);
-
-        if (savedInstanceState == null) {
-
-            // Start RecyclerView with Adapter
-            initRecyclerView();
-
-            mBundleRecyclerViewState = new Bundle();
-            Parcelable listState = mRecyclerView.getLayoutManager().onSaveInstanceState();
-            mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
-
-
-            /* Once all of our views are setup, we can load the weather data. */
-            if (Common.isOnline(this)) {
-
-                // Call Api with Retrofit
-                createDepartmentAPI();
-                // Configuration Interface
-                mInterfaceMenu.getMenu().enqueue(menuCallback);
-
-            } else {
-                Context context = getApplicationContext();
-                Toast toast = Toast.makeText(context, R.string.Error_Access, Toast.LENGTH_SHORT);
-                toast.show();
-            }
-
-
-        }else{
-            /**
-             * I ued this for get State of the Recycler for don't have without the need get API again
-             */
-            initRecyclerView();
-            mListState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE);
-            mListChildren = (ArrayList<Children>) mBundleRecyclerViewState.getSerializable(KEY_ADAPTER_STATE);
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
-            mAdapterDepartment = new AdapterDepartment(mListChildren);
-            mRecyclerView.setAdapter(mAdapterDepartment);
-            mAdapterDepartment.notifyDataSetChanged();
-        }
-
-    }
-
-
-    /**
-     * Open connect with URL for get JSON  .
-     */
-    private void createDepartmentAPI() {
-
-        mLoadingIndicator.setVisibility(View.VISIBLE);
-
-        Gson gson = new GsonBuilder()
-                .create();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Utilite.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        mInterfaceMenu = retrofit.create(InterfaceMenu.class);
-    }
-
-
-
     /**
      * Call Get Data Information of the Menu and Children.
      */
@@ -164,6 +88,74 @@ public class DepartmentActivity extends AppCompatActivity implements AdapterDepa
         }
     };
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_department);
+
+        ButterKnife.bind(this);
+
+        // Get a reference to the ProgressBar using findViewById
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_department);
+
+        if (savedInstanceState == null) {
+
+            // Start RecyclerView with Adapter
+            initRecyclerView();
+
+            mBundleRecyclerViewState = new Bundle();
+            Parcelable listState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+            mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+
+
+            /* Once all of our views are setup, we can load the weather data. */
+            if (Common.isOnline(this)) {
+
+                // Call Api with Retrofit
+                createDepartmentAPI();
+                // Configuration Interface
+                mInterfaceMenu.getMenu().enqueue(menuCallback);
+
+            } else {
+                Context context = getApplicationContext();
+                Toast toast = Toast.makeText(context, R.string.Error_Access, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+
+
+        } else {
+            /**
+             * I ued this for get State of the Recycler for don't have without the need get API again
+             */
+            initRecyclerView();
+            mListState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE);
+            mListChildren = (ArrayList<Children>) mBundleRecyclerViewState.getSerializable(KEY_ADAPTER_STATE);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+            mAdapterDepartment = new AdapterDepartment(mListChildren);
+            mRecyclerView.setAdapter(mAdapterDepartment);
+            mAdapterDepartment.notifyDataSetChanged();
+        }
+
+    }
+
+    /**
+     * Open connect with URL for get JSON  .
+     */
+    private void createDepartmentAPI() {
+
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+
+        Gson gson = new GsonBuilder()
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Utilite.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        mInterfaceMenu = retrofit.create(InterfaceMenu.class);
+    }
+
     private void initRecyclerView() {
         /**
          * use RecyclerView for list the Department .
@@ -185,18 +177,18 @@ public class DepartmentActivity extends AppCompatActivity implements AdapterDepa
 
         String idCategory = getIdCategoryLink(children.getLink());
 
-        intentToStartDetailActivity.putExtra(Utilite.PUT_EXTRA_CHILDREN_ID,idCategory);
+        intentToStartDetailActivity.putExtra(Utilite.PUT_EXTRA_CHILDREN_ID, idCategory);
         startActivity(intentToStartDetailActivity);
 
     }
 
-    public String getIdCategoryLink(String link){
+    public String getIdCategoryLink(String link) {
 
-        if (!link.equals("")){
+        if (!link.equals("")) {
             int position = link.toString().lastIndexOf("/");
             if (position > 0)
                 link = link.substring(position + 1, link.length());
-        }else{
+        } else {
             link = "0";
         }
 
@@ -204,28 +196,30 @@ public class DepartmentActivity extends AppCompatActivity implements AdapterDepa
     }
 
 
-    /** This Function Recursive have responsible  Call RecursiveCategory
+    /**
+     * This Function Recursive have responsible  Call RecursiveCategory
      * With the Show all categories
      * I Used this function when have other Category Children in of Children
      **/
-    private Children getAllCategory(Children children){
+    private Children getAllCategory(Children children) {
         Children allChildren = new Children();
-        for (int i = 0; i < children.getChildren().size() ; i++){
+        for (int i = 0; i < children.getChildren().size(); i++) {
             mListChildren.addAll(children.getChildren().get(i).getChildren());
             RecursiveCategory(children.getChildren().get(i));
         }
 
         allChildren.setChildren(mListChildren);
-     return allChildren;
+        return allChildren;
 
     }
 
 
-    /** This Function Recursive have responsible  get All Children Categories
+    /**
+     * This Function Recursive have responsible  get All Children Categories
      * GetAllCategory Call this function
-    **/
-    private Children RecursiveCategory(Children children){
-        if (children.getChildren() != null){
+     **/
+    private Children RecursiveCategory(Children children) {
+        if (children.getChildren() != null) {
 
             return getAllCategory(children);
         }
@@ -262,8 +256,6 @@ public class DepartmentActivity extends AppCompatActivity implements AdapterDepa
 
         }
     }
-
-
 
 
 }

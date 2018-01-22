@@ -3,15 +3,13 @@ package com.example.jorge.mytestb2w;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -33,6 +31,7 @@ import com.google.gson.GsonBuilder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -53,147 +52,22 @@ import static com.example.jorge.mytestb2w.Utilite.Utilite.SUPPORT_URL_SORT_BY;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.SUPPORT_URL_SOURCE;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.SUPPORT_URL_START;
 
-public class ProductActivity extends AppCompatActivity implements AdapterProduct.AdapterProductOnClickHandler{
+public class ProductActivity extends AppCompatActivity implements AdapterProduct.AdapterProductOnClickHandler {
 
+    private static Bundle mBundleRecyclerViewState;
     AdapterProduct mAdapterProduct;
-    private InterfaceProduct mInterfaceProduct;
-
-    private InterfaceDetailProduct mInterfaceDetailProduct;
-
     @BindView(R.id.rv_product)
     RecyclerView mRecyclerView;
-
     LinearLayoutManager mLinearLayoutManager;
     GridLayoutManager mGridLayoutManager;
-
     String mId;
-
-    private boolean mTwoPane;
-
-
-    private EndlessRecyclerViewScrollListener mScrollListener;
-
     List<Product> mListProduct;
-
+    private InterfaceProduct mInterfaceProduct;
+    private InterfaceDetailProduct mInterfaceDetailProduct;
+    private boolean mTwoPane;
+    private EndlessRecyclerViewScrollListener mScrollListener;
     private ProgressBar mLoadingIndicator;
-    private static Bundle mBundleRecyclerViewState;
     private Parcelable mListState;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
-
-
-        ButterKnife.bind(this);
-
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_product);
-
-
-        Resources res = getResources();
-
-
-
-
-        mTwoPane = res.getBoolean(R.bool.adjust_view_bounds);
-
-        if (savedInstanceState == null) {
-
-            // Start RecyclerView with Adapter
-            initRecyclerView();
-
-
-            mBundleRecyclerViewState = new Bundle();
-            Parcelable listState = mRecyclerView.getLayoutManager().onSaveInstanceState();
-            mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE_PRODUCT, listState);
-
-
-            /* Once all of our views are setup, we can load the weather data. */
-            if (Common.isOnline(this)) {
-
-                // Call Api with Retrofit
-                createProductAPI();
-
-                Bundle extra = getIntent().getExtras();
-                mId = extra.getString(PUT_EXTRA_CHILDREN_ID);
-
-                // Configuration Interface
-                mInterfaceProduct.getProduct(SUPPORT_URL_START, SUPPORT_URL_SORT_BY, SUPPORT_URL_SOURCE, SUPPORT_URL_FILTER_PART1 + mId + SUPPORT_URL_FILTER_PART2).enqueue(productCallback);
-
-                createProductDetailAPI();
-
-            } else {
-                Context context = getApplicationContext();
-                Toast toast = Toast.makeText(context, R.string.Error_Access, Toast.LENGTH_SHORT);
-                toast.show();
-            }
-
-        }else{
-            /**
-             * I ued this for get State of the Recycler for don't have without the need get API again
-             */
-            initRecyclerView();
-            mListState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE_PRODUCT);
-            mListProduct = (ArrayList<Product>) mBundleRecyclerViewState.getSerializable(KEY_ADAPTER_STATE_PRODUCT);
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
-            mAdapterProduct = new AdapterProduct(mListProduct);
-            mRecyclerView.setAdapter(mAdapterProduct);
-
-        }
-
-
-    }
-
-    /**
-     * Call Get Information Product .
-     */
-    private Callback<ListWrapperProduct<Product>> productCallback = new Callback<ListWrapperProduct<Product>>() {
-        @Override
-        public void onResponse(Call<ListWrapperProduct<Product>> call, final Response<ListWrapperProduct<Product>> response) {
-            try {
-                if (response.isSuccessful()) {
-                   List<Product> data = new ArrayList<>();
-                    data.addAll(response.body().products);
-
-                    if (mRecyclerView.getAdapter() == null) {
-                        mAdapterProduct = new AdapterProduct(data);
-                        mRecyclerView.setAdapter(mAdapterProduct);
-                    }else{
-                        mAdapterProduct.getData().addAll(data);
-                        mAdapterProduct.notifyDataSetChanged();
-                    }
-
-                    for (int i = 0 ; i < data.size(); i++){
-                        mInterfaceDetailProduct.getProductDetail(Integer.toString(data.get(i).getId()))
-                                .enqueue(productDetailCallback);
-                    }
-
-                } else {
-                    Log.d("QuestionsCallback", "Code: " + response.code() + " Message: " + response.message());
-                }
-            } catch (NullPointerException e) {
-                System.out.println("onActivityResult consume crashed");
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Context context = getApplicationContext();
-                        Toast toast = Toast.makeText(context, R.string.Error_Access_empty, Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                });
-            }
-        }
-
-
-        @Override
-        public void onFailure(Call<ListWrapperProduct<Product>> call, Throwable t) {
-            t.printStackTrace();
-        }
-    };
-
-
-
-
     /**
      * Call Get Information Repositories .
      */
@@ -207,7 +81,7 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
 
                     if (data.getProduct().getResult().getImages() != null) {
 
-                       updateDataProductDetail(data);
+                        updateDataProductDetail(data);
 
                     }
 
@@ -244,6 +118,114 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
             t.printStackTrace();
         }
     };
+    /**
+     * Call Get Information Product .
+     */
+    private Callback<ListWrapperProduct<Product>> productCallback = new Callback<ListWrapperProduct<Product>>() {
+        @Override
+        public void onResponse(Call<ListWrapperProduct<Product>> call, final Response<ListWrapperProduct<Product>> response) {
+            try {
+                if (response.isSuccessful()) {
+                    List<Product> data = new ArrayList<>();
+                    data.addAll(response.body().products);
+
+                    if (mRecyclerView.getAdapter() == null) {
+                        mAdapterProduct = new AdapterProduct(data);
+                        mRecyclerView.setAdapter(mAdapterProduct);
+                    } else {
+                        mAdapterProduct.getData().addAll(data);
+                        mAdapterProduct.notifyDataSetChanged();
+                    }
+
+                    for (int i = 0; i < data.size(); i++) {
+                        mInterfaceDetailProduct.getProductDetail(Integer.toString(data.get(i).getId()))
+                                .enqueue(productDetailCallback);
+                    }
+
+                } else {
+                    Log.d("QuestionsCallback", "Code: " + response.code() + " Message: " + response.message());
+                }
+            } catch (NullPointerException e) {
+                System.out.println("onActivityResult consume crashed");
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Context context = getApplicationContext();
+                        Toast toast = Toast.makeText(context, R.string.Error_Access_empty, Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
+            }
+        }
+
+
+        @Override
+        public void onFailure(Call<ListWrapperProduct<Product>> call, Throwable t) {
+            t.printStackTrace();
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_product);
+
+
+        ButterKnife.bind(this);
+
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_product);
+
+
+        Resources res = getResources();
+
+
+        mTwoPane = res.getBoolean(R.bool.adjust_view_bounds);
+
+        if (savedInstanceState == null) {
+
+            // Start RecyclerView with Adapter
+            initRecyclerView();
+
+
+            mBundleRecyclerViewState = new Bundle();
+            Parcelable listState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+            mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE_PRODUCT, listState);
+
+
+            /* Once all of our views are setup, we can load the weather data. */
+            if (Common.isOnline(this)) {
+
+                // Call Api with Retrofit
+                createProductAPI();
+
+                Bundle extra = getIntent().getExtras();
+                mId = extra.getString(PUT_EXTRA_CHILDREN_ID);
+
+                // Configuration Interface
+                mInterfaceProduct.getProduct(SUPPORT_URL_START, SUPPORT_URL_SORT_BY, SUPPORT_URL_SOURCE, SUPPORT_URL_FILTER_PART1 + mId + SUPPORT_URL_FILTER_PART2).enqueue(productCallback);
+
+                createProductDetailAPI();
+
+            } else {
+                Context context = getApplicationContext();
+                Toast toast = Toast.makeText(context, R.string.Error_Access, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+
+        } else {
+            /**
+             * I ued this for get State of the Recycler for don't have without the need get API again
+             */
+            initRecyclerView();
+            mListState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE_PRODUCT);
+            mListProduct = (ArrayList<Product>) mBundleRecyclerViewState.getSerializable(KEY_ADAPTER_STATE_PRODUCT);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+            mAdapterProduct = new AdapterProduct(mListProduct);
+            mRecyclerView.setAdapter(mAdapterProduct);
+
+        }
+
+
+    }
 
     private void updateDataProductDetail(ProductDetail data) {
 
@@ -252,7 +234,7 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
         String price = "0";
         int quantity = 0;
         String value = "0";
-        if (data.getInstallment().getResult().size() > 0){
+        if (data.getInstallment().getResult().size() > 0) {
             price = Float.toString(data.getInstallment().getResult().get(0).getTotal());
             quantity = (data.getInstallment().getResult().get(0).getQuantity());
             value = Float.toString(data.getInstallment().getResult().get(0).getValue());
@@ -261,33 +243,34 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
         String urlImageSmall = "";
         String urlImageBig = "";
 
-        if (data.getProduct().getResult().getImages().get(0).getSmall() != null){
+        if (data.getProduct().getResult().getImages().get(0).getSmall() != null) {
             urlImageSmall = data.getProduct().getResult().getImages().get(0).getSmall();
         } else if (data.getProduct().getResult().getImages().get(0).getMedium() != null) {
             urlImageSmall = data.getProduct().getResult().getImages().get(0).getMedium();
-        }else if (data.getProduct().getResult().getImages().get(0).getBig() != null) {
+        } else if (data.getProduct().getResult().getImages().get(0).getBig() != null) {
             urlImageSmall = data.getProduct().getResult().getImages().get(0).getBig();
-        }else if (data.getProduct().getResult().getImages().get(0).getLarge() != null) {
+        } else if (data.getProduct().getResult().getImages().get(0).getLarge() != null) {
             urlImageSmall = data.getProduct().getResult().getImages().get(0).getLarge();
-        }else if (data.getProduct().getResult().getImages().get(0).getExtraLarge() != null) {
+        } else if (data.getProduct().getResult().getImages().get(0).getExtraLarge() != null) {
             urlImageSmall = data.getProduct().getResult().getImages().get(0).getExtraLarge();
         }
 
 
-        if (data.getProduct().getResult().getImages().get(0).getBig() != null){
+        if (data.getProduct().getResult().getImages().get(0).getBig() != null) {
             urlImageBig = data.getProduct().getResult().getImages().get(0).getBig();
         } else if (data.getProduct().getResult().getImages().get(0).getLarge() != null) {
             urlImageBig = data.getProduct().getResult().getImages().get(0).getLarge();
-        }else if (data.getProduct().getResult().getImages().get(0).getExtraLarge() != null) {
+        } else if (data.getProduct().getResult().getImages().get(0).getExtraLarge() != null) {
             urlImageBig = data.getProduct().getResult().getImages().get(0).getExtraLarge();
-        }if (data.getProduct().getResult().getImages().get(0).getSmall() != null){
+        }
+        if (data.getProduct().getResult().getImages().get(0).getSmall() != null) {
             urlImageBig = data.getProduct().getResult().getImages().get(0).getSmall();
         } else if (data.getProduct().getResult().getImages().get(0).getMedium() != null) {
             urlImageBig = data.getProduct().getResult().getImages().get(0).getMedium();
         }
 
 
-        mAdapterProduct.updateData(id,urlImageSmall,urlImageBig,price,quantity,value);
+        mAdapterProduct.updateData(id, urlImageSmall, urlImageBig, price, quantity, value);
     }
 
 
@@ -300,8 +283,6 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
         mAdapterProduct = new AdapterProduct(this);
 
 
-
-
         if (mTwoPane) {
             mLinearLayoutManager = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -312,21 +293,19 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
                 }
             };
             mRecyclerView.addOnScrollListener(mScrollListener);
-        }else
-        {
-            mGridLayoutManager = new GridLayoutManager(this,NUMBER_OF_COUMNS);
+        } else {
+            mGridLayoutManager = new GridLayoutManager(this, NUMBER_OF_COUMNS);
             mRecyclerView.setLayoutManager(mGridLayoutManager);
-                mScrollListener = new EndlessRecyclerViewScrollListener(mGridLayoutManager) {
-                    @Override
-                    public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                        loadNextDataFromApi(Integer.toString(page * 24));
-                    }
+            mScrollListener = new EndlessRecyclerViewScrollListener(mGridLayoutManager) {
+                @Override
+                public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                    loadNextDataFromApi(Integer.toString(page * 24));
+                }
 
-                };
-                mRecyclerView.addOnScrollListener(mScrollListener);
+            };
+            mRecyclerView.addOnScrollListener(mScrollListener);
 
         }
-
 
 
     }
@@ -370,12 +349,12 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
     /**
      * This function call more product
      * When Retrofit need to get more data
-    */
+     */
     public void loadNextDataFromApi(String page) {
 
         if (Common.isOnline(this)) {
             createProductAPI();
-            mInterfaceProduct.getProduct(page , SUPPORT_URL_SORT_BY ,SUPPORT_URL_SOURCE , SUPPORT_URL_FILTER_PART1 + mId + SUPPORT_URL_FILTER_PART2).enqueue(productCallback);
+            mInterfaceProduct.getProduct(page, SUPPORT_URL_SORT_BY, SUPPORT_URL_SOURCE, SUPPORT_URL_FILTER_PART1 + mId + SUPPORT_URL_FILTER_PART2).enqueue(productCallback);
         } else {
             Context context = getApplicationContext();
             Toast toast = Toast.makeText(context, R.string.Error_Access, Toast.LENGTH_SHORT);
@@ -439,8 +418,6 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
 
         }
     }
-
-
 
 
 }

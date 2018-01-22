@@ -23,65 +23,34 @@ import static com.example.jorge.mytestb2w.Utilite.Utilite.SUPPORT_STEP;
  * Created by jorge on 20/01/2018.
  */
 
-public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHolder>  {
-
-    private final List<Product> data;
-
-    private Context mContext;
+public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHolder> {
 
     /*
  * An on-click handler that we've defined to make it easy for an Activity to interface with
  * our RecyclerView
  */
     private static AdapterProductOnClickHandler mClickHandler;
-    /**
-     * The interface that receives onClick messages.
-     */
-    public interface AdapterProductOnClickHandler {
-        void onClick(Product product);
-    }
+    private final List<Product> data;
+    private Context mContext;
 
-    /** Constructs the class**/
-    public  AdapterProduct(AdapterProductOnClickHandler clickHandler) {
+    /**
+     * Constructs the class
+     **/
+    public AdapterProduct(AdapterProductOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
         data = null;
     }
 
-
-    /** class view holder**/
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        @BindView(R.id.iv_image_product)
-        ImageView mImageProductImageView;
-        @BindView(R.id.tv_name_product)
-        TextView mNameTextView;
-        @BindView(R.id.tv_price)
-        TextView mPriceTextView;
-        @BindView(R.id.tv_installment)
-        TextView mInstallmentTextView;
-
-        /** get field of the main for show recyclerView**/
-        public ViewHolder(View v) {
-            super(v);
-            ButterKnife.bind(this, itemView);
-            v.setOnClickListener(this);
-        }
-
-        /** configuration the Event onclick. Pass o Object **/
-        @Override
-        public void onClick(View view) {
-            int adapterPosition = getAdapterPosition();
-            Product product = data.get(adapterPosition);
-            mClickHandler.onClick(product);
-
-        }
-    }
-
-    /** create lit de Adapter**/
+    /**
+     * create lit de Adapter
+     **/
     public AdapterProduct(List<Product> data) {
         this.data = data;
     }
 
-    /** Create information View holder**/
+    /**
+     * Create information View holder
+     **/
     @Override
     public AdapterProduct.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
@@ -92,7 +61,9 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
         return new ViewHolder(v);
     }
 
-    /** Create filed bind hold full **/
+    /**
+     * Create filed bind hold full
+     **/
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
@@ -102,9 +73,9 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
         holder.mNameTextView.setText((product.getName()));
         holder.mPriceTextView.setText(mContext.getResources().getString(R.string.money) + " " + product.getPrice());
 
-        if (product.getValue() != null){
+        if (product.getValue() != null) {
             holder.mInstallmentTextView.setText(Integer.toString(product.getQuantity()) + " x " + product.getValue());
-        }else {
+        } else {
             holder.mInstallmentTextView.setText("");
         }
 
@@ -119,7 +90,9 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
 
     }
 
-    /** Returns the total Adapter**/
+    /**
+     * Returns the total Adapter
+     **/
     @Override
     public int getItemCount() {
         return data.size();
@@ -134,8 +107,8 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
      * The Product with your Detail URL image and all Information value
      */
     public void updateData(int id, String urlImageSmall, String urlImageBig, String price, int quantity, String value) {
-       int i =  data.size() - SUPPORT_STEP;
-        while (i < data.size() ){
+        int i = data.size() - SUPPORT_STEP;
+        while (i < data.size()) {
             if (id == data.get(i).getId()) {
                 data.get(i).setUrl_image_small(urlImageSmall);
                 data.get(i).setUrl_image_big(urlImageBig);
@@ -148,7 +121,46 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
         notifyDataSetChanged();
     }
 
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface AdapterProductOnClickHandler {
+        void onClick(Product product);
+    }
 
+    /**
+     * class view holder
+     **/
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.iv_image_product)
+        ImageView mImageProductImageView;
+        @BindView(R.id.tv_name_product)
+        TextView mNameTextView;
+        @BindView(R.id.tv_price)
+        TextView mPriceTextView;
+        @BindView(R.id.tv_installment)
+        TextView mInstallmentTextView;
+
+        /**
+         * get field of the main for show recyclerView
+         **/
+        public ViewHolder(View v) {
+            super(v);
+            ButterKnife.bind(this, itemView);
+            v.setOnClickListener(this);
+        }
+
+        /**
+         * configuration the Event onclick. Pass o Object
+         **/
+        @Override
+        public void onClick(View view) {
+            int adapterPosition = getAdapterPosition();
+            Product product = data.get(adapterPosition);
+            mClickHandler.onClick(product);
+
+        }
+    }
 
 
 }

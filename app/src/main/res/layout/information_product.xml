@@ -34,12 +34,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:lines="5"
-                android:text="tv_name_product"
                 android:textColor="@android:color/background_dark"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rl_RelativeLayout" />
+
             <TextView
 
                 android:id="@+id/tv_price"
@@ -49,7 +49,6 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="8dp"
                 android:maxLines="1"
-                android:text="tv_price"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name_product" />
@@ -61,12 +60,9 @@
                 android:layout_below="@+id/tv_price"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
-                android:text="tv_installment"
                 android:textColor="@color/colorRed"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/tv_price" />
-
-
 
 
             <RelativeLayout
@@ -90,12 +86,8 @@
             </RelativeLayout>
 
 
-
-
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
-
-
 
 
 </android.support.constraint.ConstraintLayout>

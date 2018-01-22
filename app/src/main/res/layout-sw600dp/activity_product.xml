@@ -8,13 +8,13 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_product"
         android:layout_width="300dp"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 
     <ProgressBar
         android:id="@+id/pb_product"
-        android:layout_height="42dp"
         android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_gravity="center"
         android:visibility="invisible" />
 
@@ -34,14 +34,7 @@
             android:scaleType="centerInside" />
 
 
-
-
-
     </LinearLayout>
-
-
-
-
 
 
 </LinearLayout>

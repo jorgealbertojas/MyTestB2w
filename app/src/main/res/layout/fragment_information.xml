@@ -28,8 +28,7 @@
         android:id="@+id/tv_product_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="kkkkkkkk">
+        android:layout_margin="5dp">
 
     </TextView>
 
@@ -41,7 +40,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="8dp"
         android:maxLines="1"
-        android:text="tv_price"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -52,7 +50,6 @@
         android:layout_below="@+id/tv_price"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:text="tv_installment"
         android:textColor="@color/colorRed"
         android:textStyle="bold" />
 

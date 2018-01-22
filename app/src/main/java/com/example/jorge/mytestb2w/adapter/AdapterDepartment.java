@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.example.jorge.mytestb2w.R;
 import com.example.jorge.mytestb2w.model.Children;
 
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -20,23 +22,13 @@ import butterknife.ButterKnife;
 
 public class AdapterDepartment extends RecyclerView.Adapter<AdapterDepartment.ViewHolder> {
 
-    private final List<Children> data;
-
-    private Context mContext;
-
-
     /*
  * An on-click handler that we've defined to make it easy for an Activity to interface with
  * our RecyclerView
  */
     private static AdapterDepartmentOnClickHandler mClickHandler;
-
-    /**
-     * The interface that receives onClick messages.
-     */
-    public interface AdapterDepartmentOnClickHandler {
-        void onClick(Children children);
-    }
+    private final List<Children> data;
+    private Context mContext;
 
     /**
      * Constructs the class
@@ -44,35 +36,6 @@ public class AdapterDepartment extends RecyclerView.Adapter<AdapterDepartment.Vi
     public AdapterDepartment(AdapterDepartmentOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
         data = null;
-    }
-
-
-    /**
-     * class view holder
-     **/
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.tv_name_department)
-        TextView mNameTextView;
-
-        /**
-         * get field of the main for show recyclerView
-         **/
-        public ViewHolder(View v) {
-            super(v);
-            ButterKnife.bind(this, itemView);
-            v.setOnClickListener(this);
-        }
-
-        /**
-         * configuration the Event onclick. Pass o Object Department
-         **/
-        @Override
-        public void onClick(View view) {
-            int adapterPosition = getAdapterPosition();
-            Children children = data.get(adapterPosition);
-            mClickHandler.onClick(children);
-
-        }
     }
 
     /**
@@ -114,5 +77,40 @@ public class AdapterDepartment extends RecyclerView.Adapter<AdapterDepartment.Vi
 
     public List<Children> getData() {
         return data;
+    }
+
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface AdapterDepartmentOnClickHandler {
+        void onClick(Children children);
+    }
+
+    /**
+     * class view holder
+     **/
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.tv_name_department)
+        TextView mNameTextView;
+
+        /**
+         * get field of the main for show recyclerView
+         **/
+        public ViewHolder(View v) {
+            super(v);
+            ButterKnife.bind(this, itemView);
+            v.setOnClickListener(this);
+        }
+
+        /**
+         * configuration the Event onclick. Pass o Object Department
+         **/
+        @Override
+        public void onClick(View view) {
+            int adapterPosition = getAdapterPosition();
+            Children children = data.get(adapterPosition);
+            mClickHandler.onClick(children);
+
+        }
     }
 }
