@@ -4,4 +4,6 @@
     <string name="Error_Access">No access internet</string>
     <string name="Error_Access_empty">Data empty! There were problems consuming the product, please use RESTORE button.</string>
 
+    <string name="money">R$</string>
+
 </resources>

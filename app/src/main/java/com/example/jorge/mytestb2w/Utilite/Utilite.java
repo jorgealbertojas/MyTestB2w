@@ -10,7 +10,8 @@ public class Utilite {
      * Get API git Americanas BASE URL.
      */
     public final static String BASE_URL = "https://spacey-api-v2-americanas.b2w.io/v2/spacey-api/";
-    public final static String BASE_URL_PRODUCTOR = "https://mystique-v1-americanas.b2w.io";
+    public final static String BASE_URL_PRODUCT = "https://mystique-v1-americanas.b2w.io";
+    public final static String BASE_URL_DETAIL = "https://restql-server-api-v1-americanas.b2w.io/run-query/";
 
     /**
      * Field for PUT EXTRA.
@@ -27,6 +28,8 @@ public class Utilite {
     public final static String SUPPORT_URL_SOURCE = "omega";
     public final static String SUPPORT_URL_SORT_BY  = "bestSellers";
     public final static String SUPPORT_URL_START = "0";
+
+    public final static int SUPPORT_STEP = 24;
 
 
 

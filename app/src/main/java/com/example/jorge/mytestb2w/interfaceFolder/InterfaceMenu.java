@@ -7,6 +7,7 @@ import retrofit2.http.GET;
 
 /**
  * Created by jorge on 19/01/2018.
+ * interface for get Menu Americanas
  */
 
 public interface InterfaceMenu {
