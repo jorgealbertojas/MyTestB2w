@@ -15,6 +15,7 @@ import com.example.jorge.mytestb2w.Utilite.Common;
 import com.example.jorge.mytestb2w.Utilite.EndlessRecyclerViewScrollListener;
 import com.example.jorge.mytestb2w.Utilite.Utilite;
 import com.example.jorge.mytestb2w.adapter.AdapterProduct;
+import com.example.jorge.mytestb2w.fragment.FragmentDetailProduct;
 import com.example.jorge.mytestb2w.interfaceFolder.InterfaceDetailProduct;
 import com.example.jorge.mytestb2w.interfaceFolder.InterfaceProduct;
 import com.example.jorge.mytestb2w.model.ListWrapperProduct;
@@ -80,6 +81,11 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
 
         createProductDetailAPI();
 
+
+        Resources res = getResources();
+        mTwoPane = res.getBoolean(R.bool.adjust_view_bounds);
+
+
     }
 
     /**
@@ -105,6 +111,11 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
                         mInterfaceDetailProduct.getProductDetail(Integer.toString(data.get(i).getId()))
                                 .enqueue(productDetailCallback);
                     }
+
+
+
+
+
 
                 } else {
                     Log.d("QuestionsCallback", "Code: " + response.code() + " Message: " + response.message());
@@ -146,6 +157,17 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
                     if (data.getProduct().getResult().getImages() != null) {
 
                        updateDataProductDetail(data);
+
+                    }
+
+                    if (mTwoPane) {
+                        // In two-pane mode, add initial BodyPartFragments to the screen
+                        FragmentDetailProduct part1Fragment = new FragmentDetailProduct();
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        part1Fragment.setListIndex(mAdapterProduct.getData().get(0));
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.part1_container, part1Fragment)
+                                .commit();
 
                     }
 
@@ -282,26 +304,14 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
     @Override
     public void onClick(Product product) {
 
-
-        Resources res = getResources();
-        mTwoPane = res.getBoolean(R.bool.adjust_view_bounds);
-
-
         if (mTwoPane) {
-         /*   InformationIngredientsFragment part1Fragment = new InformationIngredientsFragment();
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            part1Fragment.setListIndex(steps);
+            FragmentDetailProduct part1Fragment = new FragmentDetailProduct();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            part1Fragment.setListIndex(product);
             fragmentManager.beginTransaction()
                     .replace(R.id.part1_container, part1Fragment)
                     .commit();
-
-            VideoIngredientsFragment part2Fragment = new VideoIngredientsFragment();
-            FragmentManager fragmentManager2 = getActivity().getSupportFragmentManager();
-            part2Fragment.setListIndex(steps.getVideoURL());
-            fragmentManager2.beginTransaction()
-                    .replace(R.id.part2_container, part2Fragment)
-                    .commit();
-        */} else {
+        } else {
 
             Class destinationClass = DetailProductActivity.class;
             Intent intentToStartDetailActivity = new Intent(this, destinationClass);
