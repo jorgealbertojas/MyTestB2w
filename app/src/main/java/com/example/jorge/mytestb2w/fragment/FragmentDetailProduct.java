@@ -44,23 +44,26 @@ public class FragmentDetailProduct extends Fragment {
         TextView textViewInstallment = (TextView) rootView.findViewById(R.id.tv_installment_detail);
         ImageView imageViewProduct = (ImageView) rootView.findViewById(R.id.iv_image_product_detail);
 
-        textViewId.setText(Integer.toString(mProduct.getId()));
-        textViewPrice.setText(getContext().getResources().getString(R.string.money) + " " + mProduct.getPrice());
-        textViewName.setText((mProduct.getName()));
 
-        if (mProduct.getValue() != null){
-            textViewInstallment.setText(Integer.toString(mProduct.getQuantity()) + " x " + mProduct.getValue());
-        }else {
-            textViewInstallment.setText("");
-        }
+        if (mProduct != null) {
+            textViewId.setText(Integer.toString(mProduct.getId()));
+            textViewPrice.setText(getContext().getResources().getString(R.string.money) + " " + mProduct.getPrice());
+            textViewName.setText((mProduct.getName()));
+
+            if (mProduct.getValue() != null) {
+                textViewInstallment.setText(Integer.toString(mProduct.getQuantity()) + " x " + mProduct.getValue());
+            } else {
+                textViewInstallment.setText("");
+            }
 
 
-        if (mProduct.getUrl_image_big() != null) {
-            Picasso.with(getContext())
-                    .load(mProduct.getUrl_image_big())
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(imageViewProduct);
+            if (mProduct.getUrl_image_big() != null) {
+                Picasso.with(getContext())
+                        .load(mProduct.getUrl_image_big())
+                        .placeholder(R.mipmap.ic_launcher)
+                        .error(R.mipmap.ic_launcher)
+                        .into(imageViewProduct);
+            }
         }
 
         // Return the rootView*/

@@ -49,6 +49,8 @@ public class Utilite {
     public final static String KEY_RECYCLER_STATE_PRODUCT = "recycler_state_product";
     public final static String KEY_ADAPTER_STATE_PRODUCT = "adapter_state_product";
 
+    public final static int NUMBER_OF_COUMNS = 2;
+
 
 
 }

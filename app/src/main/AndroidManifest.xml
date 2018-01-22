@@ -13,7 +13,9 @@
         android:supportsRtl="true"
 
         android:theme="@style/AppTheme">
-        <activity android:name=".DepartmentActivity">
+        <activity android:name=".DepartmentActivity"
+            android:launchMode="singleTop"
+            android:noHistory="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,6 +28,7 @@
             android:name=".DetailProductActivity"
             android:launchMode="singleTop"
             android:noHistory="false"
+            android:screenOrientation="portrait"
             android:label="@string/product"
 
             android:parentActivityName=".ProductActivity">

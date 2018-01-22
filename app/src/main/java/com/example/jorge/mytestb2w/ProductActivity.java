@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +43,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.jorge.mytestb2w.Utilite.Utilite.KEY_ADAPTER_STATE_PRODUCT;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.KEY_RECYCLER_STATE_PRODUCT;
+import static com.example.jorge.mytestb2w.Utilite.Utilite.NUMBER_OF_COUMNS;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_BUNDLE_PRODUCT;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_EXTRA_CHILDREN_ID;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_EXTRA_PRODUCT;
@@ -62,6 +64,8 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
     RecyclerView mRecyclerView;
 
     LinearLayoutManager mLinearLayoutManager;
+    GridLayoutManager mGridLayoutManager;
+
     String mId;
 
     private boolean mTwoPane;
@@ -294,17 +298,37 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
 
         mRecyclerView.setHasFixedSize(true);
         mAdapterProduct = new AdapterProduct(this);
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mScrollListener = new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadNextDataFromApi(Integer.toString(page * 24));
-            }
 
-        };
-        mRecyclerView.addOnScrollListener(mScrollListener);
+
+
+        if (mTwoPane) {
+            mLinearLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLinearLayoutManager);
+            mScrollListener = new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
+                @Override
+                public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                    loadNextDataFromApi(Integer.toString(page * 24));
+                }
+            };
+            mRecyclerView.addOnScrollListener(mScrollListener);
+        }else
+        {
+            mGridLayoutManager = new GridLayoutManager(this,NUMBER_OF_COUMNS);
+            mRecyclerView.setLayoutManager(mGridLayoutManager);
+                mScrollListener = new EndlessRecyclerViewScrollListener(mGridLayoutManager) {
+                    @Override
+                    public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                        loadNextDataFromApi(Integer.toString(page * 24));
+                    }
+
+                };
+                mRecyclerView.addOnScrollListener(mScrollListener);
+
+        }
+
+
+
     }
 
     /**
