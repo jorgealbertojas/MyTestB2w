@@ -14,7 +14,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>
         <ProgressBar
-            android:id="@+id/pb_loading_indicator"
+            android:id="@+id/pb_department"
             android:layout_height="42dp"
             android:layout_width="42dp"
             android:layout_gravity="center"

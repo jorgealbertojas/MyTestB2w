@@ -3,12 +3,15 @@ package com.example.jorge.mytestb2w;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.jorge.mytestb2w.Utilite.Common;
@@ -23,6 +26,8 @@ import com.example.jorge.mytestb2w.model.Product;
 import com.example.jorge.mytestb2w.model.ProductDetail.ProductDetail;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -33,6 +38,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.jorge.mytestb2w.Utilite.Utilite.KEY_ADAPTER_STATE_PRODUCT;
+import static com.example.jorge.mytestb2w.Utilite.Utilite.KEY_RECYCLER_STATE_PRODUCT;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_BUNDLE_PRODUCT;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_EXTRA_CHILDREN_ID;
 import static com.example.jorge.mytestb2w.Utilite.Utilite.PUT_EXTRA_PRODUCT;
@@ -60,6 +67,13 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
 
     private EndlessRecyclerViewScrollListener mScrollListener;
 
+    List<Product> mListProduct;
+
+    private ProgressBar mLoadingIndicator;
+    private static Bundle mBundleRecyclerViewState;
+    private Parcelable mListState;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,23 +81,55 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
 
         ButterKnife.bind(this);
 
-        // Start RecyclerView with Adapter
-        initRecyclerView();
-
-        // Call Api with Retrofit
-        createProductAPI();
-
-        Bundle extra = getIntent().getExtras();
-        mId = extra.getString(PUT_EXTRA_CHILDREN_ID);
-
-        // Configuration Interface
-        mInterfaceProduct.getProduct(SUPPORT_URL_START , SUPPORT_URL_SORT_BY ,SUPPORT_URL_SOURCE , SUPPORT_URL_FILTER_PART1 + mId + SUPPORT_URL_FILTER_PART2 ).enqueue(productCallback);
-
-        createProductDetailAPI();
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_product);
 
 
         Resources res = getResources();
         mTwoPane = res.getBoolean(R.bool.adjust_view_bounds);
+
+        if (savedInstanceState == null) {
+
+            // Start RecyclerView with Adapter
+            initRecyclerView();
+
+
+            mBundleRecyclerViewState = new Bundle();
+            Parcelable listState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+            mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE_PRODUCT, listState);
+
+
+            /* Once all of our views are setup, we can load the weather data. */
+            if (Common.isOnline(this)) {
+
+                // Call Api with Retrofit
+                createProductAPI();
+
+                Bundle extra = getIntent().getExtras();
+                mId = extra.getString(PUT_EXTRA_CHILDREN_ID);
+
+                // Configuration Interface
+                mInterfaceProduct.getProduct(SUPPORT_URL_START, SUPPORT_URL_SORT_BY, SUPPORT_URL_SOURCE, SUPPORT_URL_FILTER_PART1 + mId + SUPPORT_URL_FILTER_PART2).enqueue(productCallback);
+
+                createProductDetailAPI();
+
+            } else {
+                Context context = getApplicationContext();
+                Toast toast = Toast.makeText(context, R.string.Error_Access, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+
+        }else{
+            /**
+             * I ued this for get State of the Recycler for don't have without the need get API again
+             */
+            initRecyclerView();
+            mListState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE_PRODUCT);
+            mListProduct = (ArrayList<Product>) mBundleRecyclerViewState.getSerializable(KEY_ADAPTER_STATE_PRODUCT);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+            mAdapterProduct = new AdapterProduct(mListProduct);
+            mRecyclerView.setAdapter(mAdapterProduct);
+
+        }
 
 
     }
@@ -112,11 +158,6 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
                                 .enqueue(productDetailCallback);
                     }
 
-
-
-
-
-
                 } else {
                     Log.d("QuestionsCallback", "Code: " + response.code() + " Message: " + response.message());
                 }
@@ -131,7 +172,6 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
                 });
             }
         }
-
 
 
         @Override
@@ -159,6 +199,8 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
                        updateDataProductDetail(data);
 
                     }
+
+                    mLoadingIndicator.setVisibility(View.INVISIBLE);
 
                     if (mTwoPane) {
                         // In two-pane mode, add initial BodyPartFragments to the screen
@@ -271,6 +313,9 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
      * Open connect with URL for get JSON  .
      */
     private void createProductDetailAPI() {
+
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+
         Gson gson = new GsonBuilder()
                 .create();
 
@@ -323,6 +368,37 @@ public class ProductActivity extends AppCompatActivity implements AdapterProduct
             startActivity(intentToStartDetailActivity);
         }
 
+    }
+
+    /**
+     * I ued this function for Life cycle activity for get State of the Recycler for don't have without the need get API again
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // save RecyclerView state
+        mBundleRecyclerViewState = new Bundle();
+        mListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+        mListProduct = (ArrayList<Product>) mAdapterProduct.getData();
+        mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE_PRODUCT, mListState);
+        mBundleRecyclerViewState.putSerializable(KEY_ADAPTER_STATE_PRODUCT, (Serializable) mListProduct);
+    }
+
+
+    /**
+     * I ued this function for Life cycle activity for get State of the Recycler for don't have without the need get API again
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // restore RecyclerView state
+        if (mBundleRecyclerViewState != null) {
+            mListState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE_PRODUCT);
+            mListProduct = (ArrayList<Product>) mBundleRecyclerViewState.getSerializable(KEY_ADAPTER_STATE_PRODUCT);
+
+        }
     }
 
 

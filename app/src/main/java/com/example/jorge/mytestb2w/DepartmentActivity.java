@@ -64,7 +64,7 @@ public class DepartmentActivity extends AppCompatActivity implements AdapterDepa
         ButterKnife.bind(this);
 
         // Get a reference to the ProgressBar using findViewById
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_department);
 
         if (savedInstanceState == null) {
 
